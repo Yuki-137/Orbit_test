@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>report2</title>
+
+  <!-- three.jsを読み込む(ローカル) -->
+  <!-- <script src="./three.js"></script> -->
+  <!-- three.jsを読み込む(CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/99/three.min.js"></script>
+  
+  <script src="OrbitControls.js"></script>
+
+</head>
+<body>
+ <script>
+ 
+ window.addEventListener('load', init);
+ 
+  var init = function() {
+
+    var width = 800,
+        height = 600;
+  
+    // レンダラーを作成
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height);
+    document.body.appendChild(renderer.domElement);
+  
+    // シーンを作成
+    var scene = new THREE.Scene();
+  
+    // カメラを作成
+    var camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+    const controls = new THREE.OrbitControls(camera,document.body);
+  
+
+
+    //ドーナツ1
+    var torusGeometry = new THREE.TorusGeometry( 2, 0.1, 6, 12 ); 
+    var torusMaterial = new THREE. MeshPhongMaterial( { color: 0x0000ff } );
+
+    var torus1 = new THREE.Mesh( torusGeometry, torusMaterial );
+    torus1.position.set( 0, 0, -10);
+    //scene.add( torus1 );
+
+
+    //ドーナツ2
+    var torus2 = new THREE.Mesh( torusGeometry, torusMaterial );
+    torus2.position.set( 0, 0, -10);
+    //scene.add( torus2 );
+
+    
+    //移動するドーナツ群
+    var t_move = new THREE.TorusGeometry( 2, 0.1, 6, 12 ); 
+    var tM2= new THREE. MeshPhongMaterial( { color: 0xff0000 , wireframe: true} );
+
+    //移動するドーナツ1～5
+    var torus_move1 = new THREE.Mesh( t_move, tM2 );
+    torus_move1.position.set( 0, 0, -4);
+    //scene.add( torus_move1 );
+    
+    var torus_move2 = new THREE.Mesh( t_move, tM2 );
+    torus_move2.position.set( 0, 0, 0);
+    //scene.add( torus_move2 );
+
+    var torus_move3 = new THREE.Mesh( t_move, tM2 );
+    torus_move3.position.set( 0, 0, 4);
+    //scene.add( torus_move3 );
+
+    var torus_move4 = new THREE.Mesh( t_move, tM2 );
+    torus_move4.position.set( 0, 0, 8);
+    //scene.add( torus_move4 );
+
+    var torus_move5 = new THREE.Mesh( t_move, tM2 );
+    torus_move5.position.set( 0, 0, 12);
+    //scene.add( torus_move5 );
+    
+    
+
+    //球
+    var sphereGeometry = new THREE.SphereGeometry( 0.8, 32, 32 ); 
+    var sphereMaterial = new THREE. MeshPhongMaterial( {color: 0x0000ff,wireframe: true} );
+
+    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    sphere.position.set( 0, 0, -10);
+    //scene.add( sphere );
+
+
+    //中央の箱
+    var geometry = new THREE.BoxGeometry(1, 1, 1);
+    var material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+
+    var box1 = new THREE.Mesh(geometry, material);
+    box1.position.set( 0, 0, -10 );
+    scene.add(box1);
+
+    /*var cone2 = new THREE.Mesh( coneGeometry, coneMaterial );
+    cone2.position.set( 0, 0, -10 );
+    scene.add(cone2);*/
+
+
+    //グループ
+    const Group1 = new THREE.Group()
+    Group1.add(torus1);
+    Group1.add(torus2);
+    Group1.add(sphere);
+    Group1.position.set(0,0,-20);
+    scene.add(Group1);
+
+    const Group2 = new THREE.Group()
+    Group2.add(torus_move1);
+    Group2.add(torus_move2);
+    Group2.add(torus_move3);
+    Group2.add(torus_move4);
+    Group2.add(torus_move5);
+    Group2.position.set(0,0,0);
+    scene.add(Group2);
+
+
+
+  
+    // 平行光源1
+    var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+    directionalLight1.position.set(1, 1, 1);
+    // シーンに追加
+    scene.add(directionalLight1);
+    // 平行光源2
+        var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+    directionalLight2.position.set(-1, 1, 1);
+    // シーンに追加
+    scene.add(directionalLight2);
+  
+    // 初回実行
+    var update = function() {
+      requestAnimationFrame(update);
+  
+      // 箱を回転させる
+      torus1.rotation.x += 0.01;
+
+      torus2.rotation.y += 0.01;
+
+      sphere.rotation.x += 0.01;
+
+      box1.rotation.x += 0.01;
+      box1.rotation.y += 0.01;
+ 
+      Group1.rotation.x += 0.008;
+      Group1.rotation.y += 0.008;
+
+      Group2.position.z -=0.01;
+
+
+    tick();
+
+      // 毎フレーム時に実行されるループイベントです
+    function tick() {
+          // レンダリング
+          renderer.render(scene, camera);
+          requestAnimationFrame(tick);
+    }
+
+
+
+  
+      renderer.render(scene, camera);
+    };
+    update();
+  }
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
