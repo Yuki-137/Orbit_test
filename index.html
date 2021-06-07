@@ -130,10 +130,22 @@
     directionalLight2.position.set(-1, 1, 1);
     // シーンに追加
     scene.add(directionalLight2);
+    
+    
+    tick();
+
+      // 毎フレーム時に実行されるループイベントです
+    function tick() {
+          // レンダリング
+          renderer.render(scene, camera);
+          requestAnimationFrame(tick);
+    }
+
   
     // 初回実行
     var update = function() {
       requestAnimationFrame(update);
+      renderer.render(scene, camera);
   
       // 箱を回転させる
       torus1.rotation.x += 0.01;
@@ -150,20 +162,6 @@
 
       Group2.position.z -=0.01;
 
-
-    tick();
-
-      // 毎フレーム時に実行されるループイベントです
-    function tick() {
-          // レンダリング
-          renderer.render(scene, camera);
-          requestAnimationFrame(tick);
-    }
-
-
-
-  
-      renderer.render(scene, camera);
     };
     update();
   }
